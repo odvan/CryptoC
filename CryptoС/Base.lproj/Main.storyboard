@@ -34,17 +34,17 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="gFc-Bc-xQ4">
+                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="gFc-Bc-xQ4">
                                                     <rect key="frame" x="20" y="0.0" width="335" height="56"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Bitcoin" lineBreakMode="clip" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="2pV-wY-p52">
-                                                            <rect key="frame" x="0.0" y="0.0" width="209" height="56"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="213" height="56"/>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Price" textAlignment="right" lineBreakMode="clip" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ct8-n2-5Kk">
-                                                            <rect key="frame" x="217" y="0.0" width="100" height="56"/>
+                                                            <rect key="frame" x="219" y="0.0" width="100" height="56"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="Q81-Qg-TCi"/>
                                                             </constraints>
@@ -189,8 +189,8 @@
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=compact" axis="horizontal"/>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="28" translatesAutoresizingMaskIntoConstraints="NO" id="Nc3-qH-AGi">
-                                <rect key="frame" x="15.5" y="253.5" width="89" height="92.5"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="29" translatesAutoresizingMaskIntoConstraints="NO" id="Nc3-qH-AGi">
+                                <rect key="frame" x="15.5" y="253.5" width="89" height="93.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="Gw6-le-bug">
                                         <rect key="frame" x="0.0" y="0.0" width="89" height="36"/>
@@ -215,7 +215,7 @@
                                         </variation>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="dY2-c8-KXR">
-                                        <rect key="frame" x="0.0" y="64" width="89" height="28.5"/>
+                                        <rect key="frame" x="75.5" y="65" width="13.5" height="28.5"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="9T7-x5-TEb">
                                                 <variation key="heightClass=compact-widthClass=compact" constant="36"/>

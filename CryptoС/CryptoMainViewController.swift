@@ -31,6 +31,7 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
     var rowSelectedAtLeastOnce = false
     var timer: Timer?
     let searchController = UISearchController(searchResultsController: nil)
+    var firstLayout = true
 
     
     // MARK: - VC life cycle methods
@@ -41,15 +42,11 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         splitViewController?.delegate = self
         splitViewController?.preferredDisplayMode = .allVisible
         
-        mainFetch()
         searchBarSetup()
+        mainFetch()
         
         timer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(CryptoMainViewController.settingUpdate), userInfo: nil, repeats: true)
     }
-
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -57,6 +54,12 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         print("view bounds:\(view.bounds.height)|\(view.bounds.width)")
         if view.bounds.height == 414 && rowSelectedAtLeastOnce == false { // firing segue to the first currency cell when rotating iPhone6+ to landscape mode
             firstSegue()
+        }
+        
+        if firstLayout { // hiding searchBar at the start
+            currencyTable.setContentOffset(CGPoint(x: 0, y: self.currencyTable.tableHeaderView!.frame.size.height - self.currencyTable.contentInset.top), animated: false)
+            firstLayout = false
+            print("offset: \(currencyTable.contentOffset.y)")
         }
     }
     
@@ -101,16 +104,11 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - SearchBar setup & main method
     
     private func searchBarSetup() {
-        
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         searchController.searchBar.placeholder = NSLocalizedString("Search Currency", comment: "")
         currencyTable.tableHeaderView = searchController.searchBar
-        var newBounds = self.currencyTable.bounds
-        newBounds.origin.y = newBounds.origin.y + self.searchController.searchBar.bounds.size.height
-        self.currencyTable.bounds = newBounds
-//        currencyTable.setContentOffset(CGPoint(x: 0, y: self.currencyTable.tableHeaderView!.frame.size.height), animated: true)
     }
     
     func searchingCurrency(searchText: String, scope: String = "All") {
