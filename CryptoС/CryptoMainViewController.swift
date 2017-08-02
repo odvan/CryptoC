@@ -10,17 +10,18 @@ import UIKit
 
 class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISplitViewControllerDelegate {
     
+    
     // MARK: - Constants & Variables
 
     @IBOutlet weak var currencyTable: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var fetchedCurrencies: [CurrencyModel]? {
+    var fetchedCurrencies: [CurrencyModel]? { // our model
         didSet {
             currencyTable.reloadData()
         }
     }
-    var filteredCurrencies: [CurrencyModel]? {
+    var filteredCurrencies: [CurrencyModel]? { // filtered currency
         didSet {
             currencyTable.reloadData()
         }
@@ -31,6 +32,7 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
     var timer: Timer?
     let searchController = UISearchController(searchResultsController: nil)
 
+    
     // MARK: - VC life cycle methods
 
     override func viewDidLoad() {
@@ -53,10 +55,11 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewDidLayoutSubviews()
         
         print("view bounds:\(view.bounds.height)|\(view.bounds.width)")
-        if view.bounds.height == 414 && rowSelectedAtLeastOnce == false { // firing segue to the first currency converter vc when rotating iPhone6+ and splitting screen
+        if view.bounds.height == 414 && rowSelectedAtLeastOnce == false { // firing segue to the first currency cell when rotating iPhone6+ to landscape mode
             firstSegue()
         }
     }
+    
 
     // MARK: - Wrapping main method for fetching currencies
     
@@ -74,7 +77,7 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
                     self?.fetchedCurrencies = currencies
                     self?.currencyTable.reloadData()
                     print("\(self?.view.frame.size.width), collapsed: \(self?.splitViewController?.isCollapsed)")
-                    if self?.view.frame.size.width == 736 || self?.view.frame.size.height == 414 || UIDevice.current.userInterfaceIdiom == .pad {
+                    if self?.view.frame.size.height == 414 || UIDevice.current.userInterfaceIdiom == .pad { // firing segue to first currency cell after fetching data
                         self?.firstSegue()
                     }
                 }
@@ -94,7 +97,8 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         mainFetch()
     }
     
-    // MARK: - SearchBar setup and main method
+    
+    // MARK: - SearchBar setup & main method
     
     private func searchBarSetup() {
         
@@ -103,9 +107,10 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         definesPresentationContext = true
         searchController.searchBar.placeholder = NSLocalizedString("Search Currency", comment: "")
         currencyTable.tableHeaderView = searchController.searchBar
-        if self.currencyTable.contentOffset.y == 0 {
-            self.currencyTable.setContentOffset(CGPoint(x: 0, y: self.currencyTable.tableHeaderView!.frame.size.height), animated: false)
-        }
+        var newBounds = self.currencyTable.bounds
+        newBounds.origin.y = newBounds.origin.y + self.searchController.searchBar.bounds.size.height
+        self.currencyTable.bounds = newBounds
+//        currencyTable.setContentOffset(CGPoint(x: 0, y: self.currencyTable.tableHeaderView!.frame.size.height), animated: true)
     }
     
     func searchingCurrency(searchText: String, scope: String = "All") {
@@ -115,6 +120,7 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    
     // MARK: - UISplitViewControllerDelegate
     
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
@@ -123,9 +129,10 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         return collapseDetailViewController
     }
     
+    
     // MARK: - Navigation
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) { // casual preparing data for sending to ConverterVC
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) { // casual data preparation for sending to ConverterVC
         
         if segue.identifier == "conversionSegue" {
             
@@ -158,21 +165,18 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    // Show first cell in ConverterVC
-    func firstSegue() {
+    func firstSegue() { // Show first cell after fetching data in detail VC
         rowSelectedAtLeastOnce = true
         print("It's iPhone Plus in landscape mode or iPad, collapsed: \(splitViewController?.isCollapsed), view bounds:\(view.bounds.height)|\(view.bounds.width)")
         let initialIndexPath = IndexPath(row: 0, section: 0)
         self.currencyTable.selectRow(at: initialIndexPath, animated: true, scrollPosition: UITableViewScrollPosition.none)
         
-        //let delayInSeconds = 1.0
-        //DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
-            self.performSegue(withIdentifier: "conversionSegue", sender: initialIndexPath)
-       // }
+        self.performSegue(withIdentifier: "conversionSegue", sender: initialIndexPath)
         collapseDetailViewController = false
     }
 
-    // MARK: - Table methods
+    
+    // MARK: - Table methods, usual stuff
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -201,8 +205,8 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
         
     }
-    
 }
+
 
 // MARK: - Displaying alert message when error occured
 
@@ -218,6 +222,9 @@ extension CryptoMainViewController {
     }
     
 }
+
+
+// MARK: - Conform to UISearchResultsUpdating protocol
 
 extension CryptoMainViewController: UISearchResultsUpdating {
     @available(iOS 8.0, *)

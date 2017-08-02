@@ -32,6 +32,9 @@ class ConverterVC: UIViewController, UITextFieldDelegate {
     var amountDefault: String = "1"
     var currencyToUSD = true
     
+    
+    // MARK: - VC life cycle methods
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,6 +61,9 @@ class ConverterVC: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.removeObserver(self)
     }
     
+    
+    // MARK: - Method for moving textField when keyboard appears
+    
     @objc func keyboardNotification(notification: NSNotification) {
         if let userInfo = notification.userInfo {
             let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
@@ -78,18 +84,20 @@ class ConverterVC: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func textFieldDidChange(_ textField: UITextField) {
+    func textFieldDidChange(_ textField: UITextField) { // changing currency exchange on the fly
         
         conversionMethod()
     }
     
-    @IBAction func conversion(_ sender: Any) {
+    @IBAction func conversion(_ sender: Any) { // button for switching conversion
         
-        numberField.resignFirstResponder()
+//        numberField.resignFirstResponder()
         currencyToUSD = !currencyToUSD
         conversionMethod()
     }
     
+    
+    // MARK: - Main method for converting currencies
     
     private func conversionMethod() {
         

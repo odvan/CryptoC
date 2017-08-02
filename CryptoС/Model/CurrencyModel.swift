@@ -14,7 +14,7 @@ enum Result <T>{ // completion handler for fetching method
     case Error(String)
 }
 
-struct CurrencyModel {
+struct CurrencyModel { // casual struct for currency model
     
     let name: String
     let id: String
@@ -41,10 +41,10 @@ extension CurrencyModel {
     init?(json: [String : Any]) { // init CurrencyModel from JSON data
         
         guard let name = json["name"] as? String else { return nil }
-        let id = json["id"] as? String ?? "--"
-        let rank = json["rank"] as? String ?? "--"
+        let id = json["id"] as? String ?? ""
+        let rank = json["rank"] as? String ?? ""
         let change = json["percent_change_1h"] as? String ?? ""
-        let priceUSD = json["price_usd"] as? String ?? "--"
+        let priceUSD = json["price_usd"] as? String ?? "0"
         let symbol = json["symbol"] as? String ?? ""
         
         self.name = name
@@ -62,7 +62,7 @@ extension CurrencyModel {
     }
     
     
-    // MARK: - Method for fetching currency
+    // MARK: - Method for fetching currencies
     
     static func fetchCurrencies(fromURL: String, completion: @escaping (Result<[CurrencyModel]>) -> ()) {
         

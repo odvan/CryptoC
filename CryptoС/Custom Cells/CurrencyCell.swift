@@ -11,15 +11,18 @@ import UIKit
 class CurrencyCell: UITableViewCell {
     
     
+    // MARK: - Constants & Variables
+    
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var change: UILabel!
     @IBOutlet weak var price: UILabel!
     
     
-
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+//        price.baselineAdjustment = .alignCenters
     }
 
 
