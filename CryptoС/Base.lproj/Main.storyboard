@@ -163,7 +163,7 @@
                                         <rect key="frame" x="0.0" y="120" width="150" height="40"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.59999999999999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
-                                        <state key="normal" title="↑↓">
+                                        <state key="normal" title="▲▼">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <userDefinedRuntimeAttributes>
@@ -176,13 +176,26 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="160" id="04Q-pe-qti"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="04Q-pe-qti"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="04Q-pe-qti"/>
+                                    </mask>
+                                </variation>
                                 <variation key="heightClass=compact-widthClass=compact" axis="horizontal"/>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="Nc3-qH-AGi">
-                                <rect key="frame" x="29.5" y="253.5" width="75" height="96"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="28" translatesAutoresizingMaskIntoConstraints="NO" id="Nc3-qH-AGi">
+                                <rect key="frame" x="15.5" y="253.5" width="89" height="92.5"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(BTCC)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="Gw6-le-bug">
-                                        <rect key="frame" x="0.0" y="0.0" width="75" height="36"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="currency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="Gw6-le-bug">
+                                        <rect key="frame" x="0.0" y="0.0" width="89" height="36"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="QPj-bZ-Xnm"/>
                                             <constraint firstAttribute="width" constant="80" id="oCx-ac-EKj">
@@ -204,16 +217,28 @@
                                         </variation>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="dY2-c8-KXR">
-                                        <rect key="frame" x="0.0" y="62" width="75" height="34"/>
+                                        <rect key="frame" x="0.0" y="64" width="89" height="28.5"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="34" id="9T7-x5-TEb"/>
+                                            <constraint firstAttribute="height" constant="34" id="9T7-x5-TEb">
+                                                <variation key="heightClass=compact-widthClass=compact" constant="36"/>
+                                            </constraint>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="9T7-x5-TEb"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=compact-widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="9T7-x5-TEb"/>
+                                            </mask>
+                                        </variation>
                                     </label>
                                 </subviews>
-                                <variation key="heightClass=compact-widthClass=compact" axis="horizontal" spacing="88"/>
+                                <variation key="heightClass=compact-widthClass=compact" axis="horizontal" spacing="90"/>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" cyan="0.84999999999999998" magenta="0.5" yellow="0.0" black="0.0" alpha="1" colorSpace="custom" customColorSpace="genericCMYKColorSpace"/>
@@ -224,8 +249,7 @@
                             <constraint firstItem="Y1d-lk-ZPx" firstAttribute="top" secondItem="Nc3-qH-AGi" secondAttribute="top" id="X9z-hV-dIS"/>
                             <constraint firstItem="Y1d-lk-ZPx" firstAttribute="top" secondItem="Nc3-qH-AGi" secondAttribute="bottom" constant="8" id="YvX-v5-Ks5"/>
                             <constraint firstItem="Y1d-lk-ZPx" firstAttribute="top" relation="greaterThanOrEqual" secondItem="63I-U5-mQN" secondAttribute="bottom" constant="10" id="cYy-3x-dHf"/>
-                            <constraint firstItem="Y1d-lk-ZPx" firstAttribute="centerY" secondItem="IlS-ax-dfR" secondAttribute="centerY" id="etU-bK-Emq"/>
-                            <constraint firstItem="eAh-QX-0vD" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Y1d-lk-ZPx" secondAttribute="bottom" constant="10" id="wG9-50-mUD"/>
+                            <constraint firstItem="Y1d-lk-ZPx" firstAttribute="centerY" secondItem="IlS-ax-dfR" secondAttribute="centerY" priority="750" id="etU-bK-Emq"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -241,7 +265,19 @@
                                 <include reference="YvX-v5-Ks5"/>
                             </mask>
                         </variation>
+                        <variation key="heightClass=compact-widthClass=regular">
+                            <mask key="constraints">
+                                <include reference="5mV-Au-p0N"/>
+                                <include reference="X9z-hV-dIS"/>
+                            </mask>
+                        </variation>
                         <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="5mV-Au-p0N"/>
+                                <include reference="X9z-hV-dIS"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=regular">
                             <mask key="constraints">
                                 <include reference="5mV-Au-p0N"/>
                                 <include reference="X9z-hV-dIS"/>

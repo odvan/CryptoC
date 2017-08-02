@@ -13,17 +13,26 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - Constants & Variables
 
     @IBOutlet weak var currencyTable: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     var fetchedCurrencies: [CurrencyModel]? {
         didSet {
             currencyTable.reloadData()
         }
     }
+    var filteredCurrencies: [CurrencyModel]? {
+        didSet {
+            currencyTable.reloadData()
+        }
+    }
+    
     var collapseDetailViewController = true
     var rowSelectedAtLeastOnce = false
     var timer: Timer?
-    
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
+    let searchController = UISearchController(searchResultsController: nil)
+
+    // MARK: - VC life cycle methods
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,22 +40,13 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         splitViewController?.preferredDisplayMode = .allVisible
         
         mainFetch()
-        
-        print("\(self.view.frame.size.width), collapsed: \(splitViewController?.isCollapsed)")
-        if self.view.frame.size.width == 736 || UIDevice.current.userInterfaceIdiom == .pad {
-            firstSegue()
-        }
+        searchBarSetup()
         
         timer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(CryptoMainViewController.settingUpdate), userInfo: nil, repeats: true)
-
-        
     }
 
 //    override func viewWillAppear(_ animated: Bool) {
 //        super.viewWillAppear(animated)
-//        
-//        
-//        mainFetch()
 //    }
     
     override func viewDidLayoutSubviews() {
@@ -73,6 +73,10 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
                     self?.activityIndicator.stopAnimating()
                     self?.fetchedCurrencies = currencies
                     self?.currencyTable.reloadData()
+                    print("\(self?.view.frame.size.width), collapsed: \(self?.splitViewController?.isCollapsed)")
+                    if self?.view.frame.size.width == 736 || self?.view.frame.size.height == 414 || UIDevice.current.userInterfaceIdiom == .pad {
+                        self?.firstSegue()
+                    }
                 }
                 
             case .Error(let message):
@@ -85,9 +89,30 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    @objc private func settingUpdate() {
+    @objc private func settingUpdate() { // updating results every five minutes
         
         mainFetch()
+    }
+    
+    // MARK: - SearchBar setup and main method
+    
+    private func searchBarSetup() {
+        
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        searchController.searchBar.placeholder = NSLocalizedString("Search Currency", comment: "")
+        currencyTable.tableHeaderView = searchController.searchBar
+        if self.currencyTable.contentOffset.y == 0 {
+            self.currencyTable.setContentOffset(CGPoint(x: 0, y: self.currencyTable.tableHeaderView!.frame.size.height), animated: false)
+        }
+    }
+    
+    func searchingCurrency(searchText: String, scope: String = "All") {
+        filteredCurrencies = fetchedCurrencies?.filter { currency in
+            return currency.name.lowercased().contains(searchText.lowercased())
+        }
+        
     }
     
     // MARK: - UISplitViewControllerDelegate
@@ -108,19 +133,25 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
             { print("error: no data")
                 return }
             
+            let currency: CurrencyModel
             rowSelectedAtLeastOnce = true
             
             let converterNC = segue.destination as! UINavigationController
             let converterVC = converterNC.topViewController as! ConverterVC
             
             if let indexFirst = sender as? IndexPath {
-                let currency = fetchedCurrencies![indexFirst.row]
+                currency = fetchedCurrencies![indexFirst.row]
                 converterVC.title = "convert \(currency.name)"
                 converterVC.currency = currency
                 
             } else if let index = currencyTable.indexPathForSelectedRow {
                 print("✝️ index \(index)")
-                let currency = fetchedCurrencies![index.row]
+                
+                if searchController.isActive && searchController.searchBar.text != "" {
+                    currency = filteredCurrencies![index.row] as CurrencyModel
+                } else {
+                    currency = fetchedCurrencies![index.row] as CurrencyModel
+                }
                 converterVC.title = "convert \(currency.name)"
                 converterVC.currency = currency
             }
@@ -134,10 +165,10 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         let initialIndexPath = IndexPath(row: 0, section: 0)
         self.currencyTable.selectRow(at: initialIndexPath, animated: true, scrollPosition: UITableViewScrollPosition.none)
         
-        let delayInSeconds = 1.0
-        DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+        //let delayInSeconds = 1.0
+        //DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
             self.performSegue(withIdentifier: "conversionSegue", sender: initialIndexPath)
-        }
+       // }
         collapseDetailViewController = false
     }
 
@@ -145,7 +176,9 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if fetchedCurrencies != nil {
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return filteredCurrencies!.count
+        } else if fetchedCurrencies?.count != nil {
             return fetchedCurrencies!.count
         } else {
             return 0
@@ -156,7 +189,13 @@ class CryptoMainViewController: UIViewController, UITableViewDelegate, UITableVi
         
         let cell = currencyTable.dequeueReusableCell(withIdentifier: Config.currencyCell, for: indexPath) as! CurrencyCell
         
-        let currency = fetchedCurrencies![indexPath.row] as CurrencyModel
+        let currency: CurrencyModel
+        if searchController.isActive && searchController.searchBar.text != "" {
+            currency = filteredCurrencies![indexPath.row] as CurrencyModel
+        } else {
+            currency = fetchedCurrencies![indexPath.row] as CurrencyModel
+        }
+        
         cell.configure(currency)
         
         return cell
@@ -180,3 +219,9 @@ extension CryptoMainViewController {
     
 }
 
+extension CryptoMainViewController: UISearchResultsUpdating {
+    @available(iOS 8.0, *)
+    public func updateSearchResults(for searchController: UISearchController) {
+        searchingCurrency(searchText: searchController.searchBar.text!)
+    }
+}
