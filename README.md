@@ -1,7 +1,7 @@
 # CryptoC
 
 Testing assignment for Sannacode Company.
-Using some API fetch and show in the table crypto currencies and its values in USD. With possibility calculate and convert in detail view.
+Using some API fetch and show in the table crypto currencies and its values in USD. With possibility calculating and converting currencies in detail view.
 
 Probably take a bit more time that I think because I want to do as clean app as I can. Devil in the details.
 Also I added some functionality like Search Currency.
